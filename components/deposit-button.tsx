@@ -1,9 +1,9 @@
-import {PREDICTION_MARKET_ADDRESS, USDC_ADDRESS} from "@/constants";
+import {PREDICTION_MARKET_ADDRESS} from "@/constants";
 import React, {useEffect, useState} from "react";
-import {parseUnits} from "viem";
+import {parseEther} from "viem";
 import {useWaitForTransactionReceipt, useWriteContract} from "wagmi";
 import PREDICTION_MARKET_ABI from "../lib/abi.json";
-import {baseSepolia} from "viem/chains";
+import {sepolia} from "viem/chains";
 import {Button} from "./ui/button";
 
 const DepositButton = ({
@@ -23,13 +23,15 @@ const DepositButton = ({
 
   const depositHandler = async () => {
     try {
-      const parsedAmount = parseUnits(amount, 6); // USDC has 6 decimals
+      // Convert ETH amount to wei
+      const parsedAmount = parseEther(amount);
+      
       const hash = await writeContractAsync({
         abi: PREDICTION_MARKET_ABI,
         functionName: "deposit",
-        args: [parsedAmount],
+        value: parsedAmount, // Send ETH with the transaction
         address: PREDICTION_MARKET_ADDRESS,
-        chain: baseSepolia,
+        chain: sepolia,
       });
 
       setHash(hash);

@@ -7,6 +7,8 @@ import {Badge} from "./ui/badge";
 import {Clock, Flame} from "lucide-react";
 import {Progress} from "@radix-ui/react-progress";
 import {TimestampDisplay} from "./profile";
+import {formatEther} from "viem";
+
 const AllPlacedBets = () => {
   const [userBets, setUserBets] = useState<any>();
   const {address} = useAccount();
@@ -30,10 +32,13 @@ const AllPlacedBets = () => {
     </div>
   );
 };
+
 const PlacedBetCard = ({bet, value}: {bet: any; value: any}) => {
-  const winOdds =
-    bet.totalYesAmount.toString() /
-    (bet.totalYesAmount.toString() + bet.totalNoAmount.toString());
+  const totalYesAmount = Number(formatEther(bet.totalYesAmount));
+  const totalNoAmount = Number(formatEther(bet.totalNoAmount));
+  const winOdds = totalYesAmount / (totalYesAmount + totalNoAmount);
+  const betAmount = Number(formatEther(value.amount));
+
   return (
     <Card className="mb-4 bg-black border-2 border-red-600 overflow-hidden">
       <div className="bg-red-600 p-2">
@@ -41,7 +46,7 @@ const PlacedBetCard = ({bet, value}: {bet: any; value: any}) => {
           <span>{bet.question}</span>
           <div className="flex flex-row gap-2">
             <Badge className="bg-white text-red-600">
-              ${Number(value.amount.toString()) / 1e6}
+              {betAmount.toFixed(2)} ETH
             </Badge>{" "}
             <Badge className="bg-white text-red-600">
               {value.choice === true ? "Yes" : "No"}
@@ -54,11 +59,11 @@ const PlacedBetCard = ({bet, value}: {bet: any; value: any}) => {
           <div className="flex items-center gap-2">
             <Flame className="text-green-500" size={20} />
             <span className="text-sm text-white font-bold">
-              {winOdds * 1000}%
+              {(winOdds * 100).toFixed(1)}%
             </span>
           </div>
         </div>
-        <Progress value={winOdds * 1000} className="h-2 mb-2" />
+        <Progress value={winOdds * 100} className="h-2 mb-2" />
         <div className="flex justify-between items-center text-xs text-white">
           <span>Win Chance</span>
           <div className="flex items-center gap-1">
@@ -70,4 +75,5 @@ const PlacedBetCard = ({bet, value}: {bet: any; value: any}) => {
     </Card>
   );
 };
+
 export default AllPlacedBets;

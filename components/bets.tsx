@@ -5,6 +5,8 @@ import {useAccount, useReadContract, useWriteContract} from "wagmi";
 import PREDICTION_MARKET_ABI from "../lib/abi.json";
 import {PREDICTION_MARKET_ADDRESS} from "@/constants";
 import {privateKeyToAccount} from "viem/accounts";
+import {parseEther} from "viem";
+
 interface Market {
   id: string;
   creator: string;
@@ -20,7 +22,7 @@ interface Market {
 
 function CardBets() {
   const [lastLocation, setLastLocation] = useState("");
-  const [betAmount, setBetAmount] = useState(1);
+  const [betAmount, setBetAmount] = useState(0.01); // Default bet amount in ETH
   const swiped = (direction: string, market: Market) => {
     setLastLocation(direction);
 
@@ -56,7 +58,7 @@ function CardBets() {
     const hash = await writeContractAsync({
       abi: PREDICTION_MARKET_ABI,
       functionName: "placeBet",
-      args: [market.id, side, betAmount * 10 ** 6, address],
+      args: [market.id, side, parseEther(betAmount.toString()), address],
       account: adminAccount.address,
       address: PREDICTION_MARKET_ADDRESS,
     });
@@ -101,8 +103,6 @@ function CardBets() {
     };
   };
 
-  // Usage:
-
   return (
     <div className="flex flex-wrap relative w-[90%] h-full m-auto">
       {markets.map((market, index) => {
@@ -127,8 +127,8 @@ function CardBets() {
               losePercentage={noPercentage}
               imageUrl={market.imageUri}
               betTime={market.bettingEndTime}
-              yesTotalAmount={Number(market.totalYesAmount.toString()) / 1e6}
-              noTotalAmount={Number(market.totalNoAmount.toString()) / 1e6}
+              yesTotalAmount={Number(market.totalYesAmount.toString()) / 1e18} // Changed from 1e6 to 1e18 for ETH
+              noTotalAmount={Number(market.totalNoAmount.toString()) / 1e18} // Changed from 1e6 to 1e18 for ETH
               onYesClick={async () => {
                 if (childRefs[index] && childRefs[index].current) {
                   await childRefs[index].current.swipe("right");

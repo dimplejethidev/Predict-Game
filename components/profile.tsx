@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useAccount, useReadContract} from "wagmi";
+import {formatEther} from "viem";
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Card, CardContent, CardHeader} from "@/components/ui/card";
@@ -15,7 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {User} from "lucide-react";
-import {PREDICTION_MARKET_ADDRESS, USDC_ADDRESS} from "@/constants";
+import {PREDICTION_MARKET_ADDRESS} from "@/constants";
 import PREDICTION_MARKET_ABI from "../lib/abi.json";
 
 import CreatedBets from "./created-bets";
@@ -32,9 +33,7 @@ export const TimestampDisplay = ({timestamp}: {timestamp: string}) => {
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("placed");
-
   const [userBalance, setUserBalance] = useState<any>();
-
   const {address} = useAccount();
 
   const {data: contractBalance, refetch: refetchContractBalance} =
@@ -56,8 +55,8 @@ const Profile = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button className="bg-transparent " size="icon">
-          <User className="w-8 h-8 text-gray-800" />
+        <Button className="bg-transparent text-white" size="icon">
+          <User />
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -75,8 +74,8 @@ const Profile = () => {
                 Wallet: {displayAddress}
               </p>
               <p className="text-lg font-bold mb-4 text-white flex justify-between items-center">
-                USDC Balance:{" "}
-                {userBalance && `${Number(userBalance) / 1e6} USDC`}
+                Contract Balance:{" "}
+                {userBalance && `${Number(formatEther(userBalance)).toFixed(4)} ETH`}
                 <Balance />
               </p>
             </CardContent>

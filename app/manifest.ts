@@ -2,8 +2,8 @@ import type {MetadataRoute} from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Predict Game",
-    short_name: "Predict Game",
+    name: "SwipeX",
+    short_name: "SwipeX",
     description: "Tinder but for betting",
     start_url: "/",
     display: "standalone",

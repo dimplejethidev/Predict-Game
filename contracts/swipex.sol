@@ -4,12 +4,8 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
-    using SafeERC20 for IERC20;
-
     struct Prediction {
         address creator;
         string question;
@@ -50,7 +46,6 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
     uint256 public constant MAX_RESOLUTION_DURATION = 180 days;
     
     uint256 public predictionCounter;
-    IERC20 public immutable usdc;
     
     mapping(uint256 => Prediction) public predictions;
     mapping(uint256 => mapping(address => Bet)) public bets;
@@ -102,9 +97,7 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
         _;
     }
 
-    constructor(address _usdc) Ownable(msg.sender) {
-        require(_usdc != address(0), "Invalid USDC address");
-        usdc = IERC20(_usdc);
+    constructor() Ownable(msg.sender) {
         predictionCounter = 0;
     }
 
@@ -126,13 +119,12 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
         return true;
     }
 
-    function deposit(uint256 _amount) external whenNotPaused nonReentrant {
-        require(_amount > 0, "Amount must be positive");
+    function deposit() external payable whenNotPaused nonReentrant {
+        require(msg.value > 0, "Amount must be positive");
         
-        userBalances[msg.sender] += _amount;
-        usdc.safeTransferFrom(msg.sender, address(this), _amount);
+        userBalances[msg.sender] += msg.value;
         
-        emit Deposit(msg.sender, _amount);
+        emit Deposit(msg.sender, msg.value);
     }
 
     function withdraw(uint256 _amount) external whenNotPaused nonReentrant {
@@ -140,7 +132,8 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
         require(userBalances[msg.sender] >= _amount, "Insufficient balance");
         
         userBalances[msg.sender] -= _amount;
-        usdc.safeTransfer(msg.sender, _amount);
+        (bool success, ) = msg.sender.call{value: _amount}("");
+        require(success, "Transfer failed");
         
         emit Withdrawal(msg.sender, _amount);
     }
@@ -374,49 +367,50 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
         return userPredictions;
     }
 
- function getUserBets(address _user) 
-    external 
-    view 
-    returns (PredictionView[] memory predictionViews, Bet[] memory userBets) 
-{
-    // First, count predictions where user has placed bets
-    uint256 count = 0;
-    for (uint256 i = 0; i < predictionCounter; i++) {
-        Prediction storage pred = predictions[i];
-        if (pred.exists && bets[i][_user].amount > 0) {
-            count++;
+    function getUserBets(address _user) 
+        external 
+        view 
+        returns (PredictionView[] memory predictionViews, Bet[] memory userBets) 
+    {
+        // First, count predictions where user has placed bets
+        uint256 count = 0;
+        for (uint256 i = 0; i < predictionCounter; i++) {
+            Prediction storage pred = predictions[i];
+            if (pred.exists && bets[i][_user].amount > 0) {
+                count++;
+            }
         }
-    }
-    
-    // Create arrays of correct size
-    predictionViews = new PredictionView[](count);
-    userBets = new Bet[](count);
-    uint256 currentIndex = 0;
-    
-    // Fill arrays with predictions and corresponding bets
-    for (uint256 i = 0; i < predictionCounter; i++) {
-        Prediction storage pred = predictions[i];
-        if (pred.exists && bets[i][_user].amount > 0) {
-            predictionViews[currentIndex] = PredictionView({
-                id: i,
-                creator: pred.creator,
-                question: pred.question,
-                imageUri: pred.imageUri,
-                resolutionTime: pred.resolutionTime,
-                bettingEndTime: pred.bettingEndTime,
-                isResolved: pred.isResolved,
-                outcome: pred.outcome,
-                totalYesAmount: pred.totalYesAmount,
-                totalNoAmount: pred.totalNoAmount
-            });
-            
-            userBets[currentIndex] = bets[i][_user];
-            currentIndex++;
+        
+        // Create arrays of correct size
+        predictionViews = new PredictionView[](count);
+        userBets = new Bet[](count);
+        uint256 currentIndex = 0;
+        
+        // Fill arrays with predictions and corresponding bets
+        for (uint256 i = 0; i < predictionCounter; i++) {
+            Prediction storage pred = predictions[i];
+            if (pred.exists && bets[i][_user].amount > 0) {
+                predictionViews[currentIndex] = PredictionView({
+                    id: i,
+                    creator: pred.creator,
+                    question: pred.question,
+                    imageUri: pred.imageUri,
+                    resolutionTime: pred.resolutionTime,
+                    bettingEndTime: pred.bettingEndTime,
+                    isResolved: pred.isResolved,
+                    outcome: pred.outcome,
+                    totalYesAmount: pred.totalYesAmount,
+                    totalNoAmount: pred.totalNoAmount
+                });
+                
+                userBets[currentIndex] = bets[i][_user];
+                currentIndex++;
+            }
         }
+        
+        return (predictionViews, userBets);
     }
-    
-    return (predictionViews, userBets);
-}
+
     function getPredictionDetails(uint256 _predictionId) 
         external 
         view 
@@ -464,15 +458,24 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
 
     function withdrawPlatformFees(address _to) external onlyOwner nonReentrant {
         require(_to != address(0), "Invalid address");
-        uint256 platformFeesBalance = usdc.balanceOf(address(this)) - getTotalUserBalances();
+        uint256 platformFeesBalance = address(this).balance - getTotalUserBalances();
         require(platformFeesBalance > 0, "No fees to withdraw");
         
-        usdc.safeTransfer(_to, platformFeesBalance);
+        (bool success, ) = _to.call{value: platformFeesBalance}("");
+        require(success, "Transfer failed");
+        
         emit PlatformFeesWithdrawn(_to, platformFeesBalance);
     }
 
     function getTotalUserBalances() public view returns (uint256) {
-        return usdc.balanceOf(address(this));
+        uint256 total = 0;
+        for (uint256 i = 0; i < predictionCounter; i++) {
+            Prediction storage pred = predictions[i];
+            if (pred.exists) {
+                total += pred.totalYesAmount + pred.totalNoAmount;
+            }
+        }
+        return total;
     }
 
     function pause() external onlyOwner {
@@ -481,5 +484,10 @@ contract PredictionMarketplace is Ownable, ReentrancyGuard, Pausable {
 
     function unpause() external onlyOwner {
         _unpause();
+    }
+
+    // Function to receive native token
+    receive() external payable {
+        revert("Please use deposit() function");
     }
 }

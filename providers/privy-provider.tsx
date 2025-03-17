@@ -5,7 +5,7 @@ import {PrivyProvider} from "@privy-io/react-auth";
 // Make sure to import these from `@privy-io/wagmi`, not `wagmi`
 import {WagmiProvider, createConfig} from "@privy-io/wagmi";
 
-import {auroraTestnet, aurora, sepolia} from "viem/chains";
+import {sepolia,auroraTestnet, aurora} from "viem/chains";
 import {http} from "wagmi";
 
 import type {PrivyClientConfig} from "@privy-io/react-auth";
@@ -26,7 +26,7 @@ const queryClient = new QueryClient();
 
 export default function Providers({children}: {children: React.ReactNode}) {
   return (
-    <PrivyProvider appId="cm8cnhn2902k12trqxv9n4qzt" config={privyConfig}>
+    <PrivyProvider appId="cm25zyohn01jrbegr4c6ndoap" config={privyConfig}>
       <QueryClientProvider client={queryClient}>
         <WagmiProvider config={config}>{children}</WagmiProvider>
       </QueryClientProvider>

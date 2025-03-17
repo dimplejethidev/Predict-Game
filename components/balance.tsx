@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {
   useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
   useBalance,
   useReadContract,
-  useSimulateContract,
 } from "wagmi";
-import {erc20Abi, parseUnits} from "viem";
+import {parseEther, formatEther} from "viem";
 import {Button} from "@/components/ui/button";
 import {
   Dialog,
@@ -24,12 +23,10 @@ import {
   ArrowRight,
   Check,
   AlertCircle,
-  DollarSign,
 } from "lucide-react";
-import {PREDICTION_MARKET_ADDRESS, USDC_ADDRESS} from "../constants/index";
+import {PREDICTION_MARKET_ADDRESS} from "../constants/index";
 import PREDICTION_MARKET_ABI from "../lib/abi.json";
 import DepositButton from "./deposit-button";
-import ApproveButton from "./approve-button";
 
 interface DepositProps {
   className?: string;
@@ -43,14 +40,12 @@ interface TransactionStatus {
   message?: string;
 }
 
-const PRESET_AMOUNTS = [5, 10, 15];
+const PRESET_AMOUNTS = [0.1, 0.5, 1];
 
 export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState("");
   const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
-  const [userBalance, setUserBalance] = useState<any>();
-  const [needsApproval, setNeedsApproval] = useState(true);
   const [txStatus, setTxStatus] = useState<TransactionStatus>({
     isSuccess: false,
     isError: false,
@@ -58,47 +53,46 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
 
   const {address} = useAccount();
 
-  const {data: usdcBalance, refetch: refetchUsdcBalance} = useBalance({
-    address,
-    token: USDC_ADDRESS,
-  });
-
-  const {data: allowance, refetch: refetchAllowance} = useReadContract({
-    address: USDC_ADDRESS,
-    abi: erc20Abi,
-    functionName: "allowance",
-    args: address ? [address, PREDICTION_MARKET_ADDRESS] : undefined,
-  });
-
   const {data: contractBalance, refetch: refetchContractBalance} =
     useReadContract({
       address: PREDICTION_MARKET_ADDRESS,
       abi: PREDICTION_MARKET_ABI,
       functionName: "getBalance",
       account: address,
+      enabled: !!address,
     });
 
-  useEffect(() => {
-    setUserBalance(contractBalance);
-  }, [contractBalance]);
+  const {data: nativeBalance} = useBalance({
+    address,
+    enabled: !!address,
+  });
+
+  const formattedContractBalance = contractBalance ? Number(formatEther(contractBalance as bigint)).toFixed(4) : '0';
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className={`bg-red-600 hover:bg-red-700 ${className}`}>
-          Deposit USDC
+          Deposit ETH
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-black border-2 border-red-600 text-white max-w-md">
         <DialogHeader>
-          <DialogTitle>Deposit USDC</DialogTitle>
+          <DialogTitle>Deposit ETH</DialogTitle>
           <DialogDescription className="text-gray-400">
-            Deposit USDC to participate in prediction markets
+            Deposit ETH to participate in prediction markets
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          {userBalance && <p>{userBalance}</p>}
+          {nativeBalance && (
+            <p className="text-sm text-gray-400">
+              Wallet Balance: {Number(nativeBalance.formatted).toFixed(4)} ETH
+            </p>
+          )}
+          <p className="text-sm text-gray-400">
+            Contract Balance: {formattedContractBalance} ETH
+          </p>
           <div className="flex gap-2">
             {PRESET_AMOUNTS.map((presetAmount) => (
               <Button
@@ -114,13 +108,12 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
                   setSelectedPreset(presetAmount);
                 }}
               >
-                ${presetAmount}
+                {presetAmount} ETH
               </Button>
             ))}
           </div>
 
           <div className="relative">
-            <DollarSign className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
             <Input
               type="number"
               value={amount}
@@ -128,8 +121,10 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
                 setAmount(e.target.value);
                 setSelectedPreset(null);
               }}
-              className="pl-10 bg-transparent text-white"
-              placeholder="Enter amount"
+              className="pl-3 bg-transparent text-white"
+              placeholder="Enter ETH amount"
+              step="0.1"
+              min="0.1"
             />
           </div>
 
@@ -149,24 +144,26 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
             </Alert>
           )}
 
-          {allowance! > 0 ? (
-            <DepositButton
-              amount={amount}
-              onError={(e) => {
-                console.log(e);
-              }}
-              onSuccess={(e) => {
-                setOpen(false);
-                refetchContractBalance();
-              }}
-            />
-          ) : (
-            <ApproveButton
-              onSuccess={() => {
-                setNeedsApproval(false);
-              }}
-            />
-          )}
+          <DepositButton
+            amount={amount}
+            onError={(e) => {
+              console.log(e);
+              setTxStatus({
+                isError: true,
+                isSuccess: false,
+                message: e.message || "Transaction failed"
+              });
+            }}
+            onSuccess={(e) => {
+              setOpen(false);
+              refetchContractBalance();
+              setTxStatus({
+                isError: false,
+                isSuccess: true,
+                message: "Deposit successful!"
+              });
+            }}
+          />
         </div>
       </DialogContent>
     </Dialog>
