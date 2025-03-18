@@ -54,10 +54,9 @@ const CreatedBetCard = ({ bet }: { bet: any }) => {
           <div className="flex items-center gap-1">
             <Trophy className="text-[#2E6F40]" size={14} />
             <span className="text-xs text-gray-700">
-              Pool: ${" "}
-              {(Number(bet.totalYesAmount.toString()) +
+              Pool: {(Number(bet.totalYesAmount.toString()) +
                 Number(bet.totalNoAmount.toString())) /
-                1e6}
+                1e18} ETH
             </span>
           </div>
         </div>

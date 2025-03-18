@@ -7,6 +7,7 @@ import  Profile  from "./profile";
 const MenuBar = () => {
   return (
     <div className="absolute bottom-0 w-full flex flex-row justify-between gap-4 p-8 pt-4 bg-white  border-t rounded-t-lg border-primary border-opacity-20">
+     <a href="/">
       <Button
         asChild
         variant="ghost"
@@ -15,6 +16,7 @@ const MenuBar = () => {
       >
         <House className="w-8 h-8 text-primary" />
       </Button>
+      </a>
      
       <Button
         asChild

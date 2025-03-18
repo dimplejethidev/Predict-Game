@@ -123,7 +123,7 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={`bg-primary text-white hover:bg-primary/60 ${className}`}>
+        <Button className={`bg-primary active:border-primary boreder-primary text-white hover:bg-primary/60 ${className}`}>
           Manage Balance
         </Button>
       </DialogTrigger>
@@ -148,7 +148,6 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
             {PRESET_AMOUNTS.map((presetAmount) => (
               <Button
                 key={presetAmount}
-                // variant="outline"
                 className={`flex-1 ${
                   selectedPreset === presetAmount
                     ? "bg-primary text-white"
@@ -177,6 +176,9 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
               step="0.1"
               min="0.1"
             />
+            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black">
+              ETH
+            </span>
           </div>
 
           {txStatus.isError && (

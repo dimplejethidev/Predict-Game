@@ -80,8 +80,8 @@ const Profile = () => {
                 Wallet: {displayAddress}
               </p>
               <p className="text-lg font-bold mb-4 text-primary flex justify-between items-center">
-                Platform Balance:{" "}
-                {userBalance && `${Number(formatEther(userBalance)).toFixed(2)} ETH` || " /n 0.00 ETH"}
+                Platform Balance:{" "} <br />
+                {userBalance && `${Number(formatEther(userBalance)).toFixed(2)} ETH` || "/n 0.00 ETH"}
                 <Balance />
               </p>
             </CardContent>
@@ -95,13 +95,13 @@ const Profile = () => {
             <TabsList className="grid w-full grid-cols-2 bg-light mb-4">
               <TabsTrigger
                 value="placed"
-                className="text-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+                className="text-primary data-[state=active]:bg-primary bg-gray-200 data-[state=active]:text-white"
               >
                 Bets Placed
               </TabsTrigger>
               <TabsTrigger
                 value="created"
-                className="text-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+                className="text-primary data-[state=active]:bg-primary bg-gray-100 data-[state=active]:text-white"
               >
                 Bets Created
               </TabsTrigger>
