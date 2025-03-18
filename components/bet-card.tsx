@@ -33,8 +33,20 @@ const BetCard: React.FC<BetCardProps> = ({
   betAmountInput,
   setBetAmountInput,
 }) => {
-  const handleIncreaseBet = () => setBetAmountInput(Number((betAmountInput + 0.1).toFixed(2)));
-  const handleDecreaseBet = () => setBetAmountInput(Number((Math.max(0.1, betAmountInput - 0.1)).toFixed(2)));
+  const handleIncreaseBet = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setBetAmountInput(Number((betAmountInput + 0.1).toFixed(2)));
+  };
+
+  const handleDecreaseBet = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setBetAmountInput(Number((Math.max(0.1, betAmountInput - 0.1)).toFixed(2)));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0.1;
+    setBetAmountInput(Number((Math.max(0.1, value)).toFixed(2)));
+  };
 
   return (
     <div className="w-full max-w-sm mx-auto h-[calc(100vh-8rem)] bg-light text-white rounded-xl shadow-lg overflow-hidden">
@@ -85,11 +97,7 @@ const BetCard: React.FC<BetCardProps> = ({
           <input
             type="number"
             value={betAmountInput}
-            onChange={(e) =>
-              setBetAmountInput(
-                Number((Math.max(0.1, parseFloat(e.target.value) || 0.1)).toFixed(2))
-              )
-            }
+            onChange={handleInputChange}
             step="0.1"
             min="0.1"
             className="w-20 text-center bg-white text-gray-900 border border-gray-300 rounded-md"
