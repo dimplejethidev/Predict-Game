@@ -6,26 +6,25 @@ import  Profile  from "./profile";
 
 const MenuBar = () => {
   return (
-    <div className="absolute bottom-0 w-full flex flex-row justify-between gap-4 p-8 pt-4 bg-gray-100 border-t border-gray-300 rounded-t-lg shadow-md">
-    <Button
-      asChild
-      variant="ghost"
-      size="icon"
-      className="text-gray-800 "
-    >
-      <House className="w-8 h-8 text-gray-800" />
-    </Button>
-  
-    <Button
-      asChild
-      variant="ghost"
-      size="icon"
-      className="text-gray-800 "
-    >
-      <Profile  />
-    </Button>
-  </div>
-  
+    <div className="absolute bottom-0 w-full flex flex-row justify-between gap-4 p-8 pt-4 bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg border-t rounded-t-lg border-white border-opacity-20">
+      <Button
+        asChild
+        variant="ghost"
+        size="icon"
+        className="text-white hover:bg-white hover:bg-opacity-20"
+      >
+        <House className="w-8 h-8 text-white" />
+      </Button>
+     
+      <Button
+        asChild
+        variant="ghost"
+        size="icon"
+        className="text-white hover:bg-white hover:bg-opacity-20"
+      >
+       <Profile />
+      </Button>
+    </div>
   );
 };
 

@@ -96,9 +96,9 @@ const NewBet = () => {
   };
 
   const renderStepContent = () => (
-    <div className="flex flex-col justify-between flex-grow bg-gray-100 text-gray-800">
+    <div className="flex flex-col justify-between flex-grow">
       <div className="space-y-4">
-        <h3 className="text-2xl font-bold ">
+        <h3 className="text-2xl font-bold text-white">
           {steps[step].icon} {steps[step].name}
         </h3>
         {step === 0 && (
@@ -227,7 +227,7 @@ const NewBet = () => {
       </Sheet>
 
       <Dialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
-        <DialogContent className="bg-black  border border-red-500">
+        <DialogContent className="bg-black text-white border border-red-500">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">
               Prediction Created!

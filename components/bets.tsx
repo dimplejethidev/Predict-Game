@@ -5,6 +5,9 @@ import {useAccount, useReadContract, useWriteContract} from "wagmi";
 import PREDICTION_MARKET_ABI from "../lib/abi.json";
 import {PREDICTION_MARKET_ADDRESS} from "@/constants";
 import {privateKeyToAccount} from "viem/accounts";
+import {parseEther} from "viem";
+import Balance from "./balance";
+
 interface Market {
   id: string;
   creator: string;
@@ -20,12 +23,31 @@ interface Market {
 
 function CardBets() {
   const [lastLocation, setLastLocation] = useState("");
-  const [betAmount, setBetAmount] = useState(1);
-  const swiped = (direction: string, market: Market) => {
+  const [betAmount, setBetAmount] = useState(0.01);
+  const [showDepositDialog, setShowDepositDialog] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const swiped = async (direction: string, market: Market) => {
     setLastLocation(direction);
 
-    if (direction === "left") placeBet(false, market);
-    if (direction === "right") placeBet(true, market);
+    if (direction === "left" || direction === "right") {
+      try {
+        await placeBet(direction === "right", market);
+        // Show success message briefly
+        setShowSuccessMessage(true);
+        setTimeout(() => {
+          setShowSuccessMessage(false);
+          // Move to next card
+          setCurrentIndex(prevIndex => prevIndex + 1);
+        }, 1500);
+      } catch (error) {
+        // Error is handled in placeBet function
+      }
+    } else {
+      // For "up" swipe (pass), just move to next card
+      setCurrentIndex(prevIndex => prevIndex + 1);
+    }
   };
 
   const [markets, setMarkets] = useState<Market[]>([]);
@@ -47,20 +69,44 @@ function CardBets() {
   };
 
   const {writeContractAsync} = useWriteContract();
+
+  const {data: contractBalance} = useReadContract({
+    address: PREDICTION_MARKET_ADDRESS,
+    abi: PREDICTION_MARKET_ABI,
+    functionName: "getBalance",
+    account: address,
+  });
+
+  const [error, setError] = useState<string | null>(null);
+
   const placeBet = async (side: boolean, market: Market) => {
     if (!market) {
       return;
     }
 
-    const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_ADMIN_PK}` as `0x${string}`);
-    const hash = await writeContractAsync({
-      abi: PREDICTION_MARKET_ABI,
-      functionName: "placeBet",
-      args: [market.id, side, betAmount * 10 ** 6, address],
-      account: adminAccount.address,
-      address: PREDICTION_MARKET_ADDRESS,
-    });
+    try {
+      const betAmountInWei = parseEther(betAmount.toString());
+      if (!contractBalance || betAmountInWei > (contractBalance as bigint)) {
+        setError("Insufficient platform balance");
+        setShowDepositDialog(true);
+        return;
+      }
+
+      setError(null);
+      const hash = await writeContractAsync({
+        abi: PREDICTION_MARKET_ABI,
+        functionName: "placeBet",
+        args: [market.id, side, betAmountInWei, address],
+        address: PREDICTION_MARKET_ADDRESS,
+      });
+      
+      // Refetch active predictions after successful bet
+      await refetchActive();
+    } catch (e: any) {
+      setError(e.message || "Failed to place bet");
+    }
   };
+
   useEffect(() => {
     if (rawActivePredictions) {
       setMarkets(rawActivePredictions as any);
@@ -101,11 +147,31 @@ function CardBets() {
     };
   };
 
-  // Usage:
-
   return (
     <div className="flex flex-wrap relative w-[90%] h-full m-auto">
-      {markets.map((market, index) => {
+      {error && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg z-50 flex flex-col items-center gap-2">
+          <p>{error}</p>
+          {error === "Insufficient platform balance" && (
+            <Balance 
+              className="bg-white text-red-600 hover:bg-gray-100 text-sm py-1"
+              onSuccess={() => {
+                setError(null);
+                setShowDepositDialog(false);
+                refetchActive();
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      {showSuccessMessage && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg z-50">
+          Bet placed successfully!
+        </div>
+      )}
+
+      {markets.slice(currentIndex).map((market, index) => {
         const {yesPercentage, noPercentage} = calculatePercentages(
           market.totalYesAmount,
           market.totalNoAmount
@@ -115,7 +181,7 @@ function CardBets() {
           <TinderCard
             ref={childRefs[index]}
             className="absolute top-0 left-0 w-full"
-            key={index}
+            key={market.id}
             onSwipe={(dir) => swiped(dir, market)}
           >
             <BetCard
@@ -127,8 +193,8 @@ function CardBets() {
               losePercentage={noPercentage}
               imageUrl={market.imageUri}
               betTime={market.bettingEndTime}
-              yesTotalAmount={Number(market.totalYesAmount.toString()) / 1e6}
-              noTotalAmount={Number(market.totalNoAmount.toString()) / 1e6}
+              yesTotalAmount={Number(market.totalYesAmount.toString()) / 1e18}
+              noTotalAmount={Number(market.totalNoAmount.toString()) / 1e18}
               onYesClick={async () => {
                 if (childRefs[index] && childRefs[index].current) {
                   await childRefs[index].current.swipe("right");
@@ -148,11 +214,18 @@ function CardBets() {
         );
       })}
 
-      {lastLocation && (
+      {lastLocation && !showSuccessMessage && (
         <div className="absolute bottom-40 bg-slate-200 rounded-full px-4 py-2 text-black left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <h2 className="text-black">
             You bet {lastLocation === "right" ? "yes" : "no"}
           </h2>
+        </div>
+      )}
+
+      {markets.length === 0 && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
+          <h2 className="text-2xl">No active predictions available</h2>
+          <p className="text-gray-400">Check back later for new predictions</p>
         </div>
       )}
     </div>
