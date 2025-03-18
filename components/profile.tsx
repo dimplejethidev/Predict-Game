@@ -55,25 +55,31 @@ const Profile = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button className="bg-transparent text-white" size="icon">
-          <User />
-        </Button>
+        
+        <Button
+                asChild
+                variant="ghost"
+                size="icon"
+                className="text-primary hover:bg-primary hover:text-primary p-1"
+              >
+               <User className="w-8 h-8 text-primary" />
+              </Button>
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full h-full sm:max-w-md p-0 bg-black"
+        className="w-full h-full sm:max-w-md p-0 bg-light"
       >
-        <SheetHeader className="text-white p-4">
+        <SheetHeader className="text-primary p-4">
           <SheetTitle className="text-xl font-bold">Betting Profile</SheetTitle>
         </SheetHeader>
         <div className="p-4 overflow-y-auto max-h-[calc(100vh-60px)]">
-          <Card className="mb-6 bg-black border-2 border-red-600">
+          <Card className="mb-6 bg-light border-2 border-primary">
             <CardHeader></CardHeader>
             <CardContent>
-              <p className="text-sm mb-2 text-white">
+              <p className="text-sm mb-2 text-primary">
                 Wallet: {displayAddress}
               </p>
-              <p className="text-lg font-bold mb-4 text-white flex justify-between items-center">
+              <p className="text-lg font-bold mb-4 text-primary flex justify-between items-center">
                 Platform Balance:{" "}
                 {userBalance && `${Number(formatEther(userBalance)).toFixed(2)} ETH`}
                 <Balance />
@@ -86,16 +92,16 @@ const Profile = () => {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 bg-black mb-4">
+            <TabsList className="grid w-full grid-cols-2 bg-light mb-4">
               <TabsTrigger
                 value="placed"
-                className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white"
+                className="text-primary data-[state=active]:bg-primary data-[state=active]:text-white"
               >
                 Bets Placed
               </TabsTrigger>
               <TabsTrigger
                 value="created"
-                className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white"
+                className="text-primary data-[state=active]:bg-primary data-[state=active]:text-white"
               >
                 Bets Created
               </TabsTrigger>

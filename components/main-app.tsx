@@ -17,7 +17,7 @@ const MainApp = () => {
         <h1 className="text-2xl font-bold mb-6 text-white w-[90%] m-auto">
           Markets
         </h1>
-        <button onClick={logout}>Logout</button>
+        
         <Bets />
       </div>
       <MenuBar />

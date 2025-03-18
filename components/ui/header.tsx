@@ -11,10 +11,16 @@ export const sixtyfour = Sixtyfour({
   display: "swap",
 });
 const Header = () => {
-  const { authenticated } = usePrivy();
+   const {user,logout , authenticated} = usePrivy();
   return (
-    <div className="flex flex-row justify-between w-full p-4">
+    <div className="flex flex-row justify-between w-full p-4 border-b border-primary">
       <h2 className={`text-primary text-2xl ${sixtyfour.className}`}>SwipeX</h2>
+
+      {authenticated && (
+            <button className="bg-primary text-light px-2 rounded-lg" onClick={logout}>Logout</button>
+      ) }
+    
+
       {authenticated && (
         <div className="flex flex-row gap-2 items-center">
           <Button

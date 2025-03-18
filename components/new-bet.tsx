@@ -160,7 +160,7 @@ const NewBet = () => {
     <>
       <Sheet>
         <SheetTrigger>
-          <Button className="bg-transparent border text-white h-10 w-10">
+          <Button className="bg-primary text-white h-10 w-10">
             <span className="text-2xl">+</span>
           </Button>
         </SheetTrigger>
