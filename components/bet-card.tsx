@@ -37,12 +37,12 @@ const BetCard: React.FC<BetCardProps> = ({
   const handleDecreaseBet = () => setBetAmountInput(Number((Math.max(0.1, betAmountInput - 0.1)).toFixed(2)));
 
   return (
-    <div className="w-full max-w-sm mx-auto h-[calc(100vh-4rem)] bg-black text-white rounded-xl shadow-lg overflow-hidden">
-      <div className="relative h-1/3 w-full">
+    <div className="w-full max-w-sm mx-auto h-[calc(100vh-8rem)] bg-light text-white rounded-xl shadow-lg overflow-hidden">
+      <div className="relative h-1/2 w-full">
         <img src={imageUrl} className="w-full h-full object-cover" />
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-white to-transparent" />
         <div className="absolute bottom-4 left-4 flex items-center">
-          <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+          <span className="bg-primary text-white text-xs px-2 py-1 rounded-full">
             <TimestampDisplay timestamp={betTime.toString()} />
           </span>
         </div>

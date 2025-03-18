@@ -70,16 +70,16 @@ const Profile = () => {
         className="w-full h-full sm:max-w-md p-0 bg-light"
       >
         <SheetHeader className="text-primary p-4">
-          <SheetTitle className="text-xl font-bold">Betting Profile</SheetTitle>
+          <SheetTitle className="text-xl font-bold text-primary">Betting Profile</SheetTitle>
         </SheetHeader>
         <div className="p-4 overflow-y-auto max-h-[calc(100vh-60px)]">
-          <Card className="mb-6 bg-gray-100 text-gray-800 border-2 border-input">
+          <Card className="mb-6 bg-light text-primary border-2 border-primary">
             <CardHeader></CardHeader>
             <CardContent>
               <p className="text-sm mb-2 ">
                 Wallet: {displayAddress}
               </p>
-              <p className="text-lg font-bold mb-4 text-white flex justify-between items-center">
+              <p className="text-lg font-bold mb-4 text-primary flex justify-between items-center">
                 Platform Balance:{" "}
                 {userBalance && `${Number(formatEther(userBalance)).toFixed(2)} ETH` || " /n 0.00 ETH"}
                 <Balance />

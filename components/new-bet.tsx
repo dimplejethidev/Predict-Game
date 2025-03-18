@@ -160,14 +160,14 @@ const NewBet = () => {
     <>
       <Sheet>
         <SheetTrigger>
-          <Button className="bg-primary text-white h-10 w-10">
+          <Button className="bg-primary text-primary h-10 w-10">
             <span className="text-2xl">+</span>
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-full bg-black text-white p-0">
+        <SheetContent className="w-full bg-light text-primary p-0">
           <div className="flex flex-col h-full p-6">
             <SheetHeader>
-              <SheetTitle className="text-3xl font-bold text-center  bg-clip-text bg-white">
+              <SheetTitle className="text-3xl font-bold text-center  bg-clip-text  bg-white">
                 Create Your Prediction
               </SheetTitle>
             </SheetHeader>
