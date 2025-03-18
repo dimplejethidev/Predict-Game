@@ -240,7 +240,7 @@ const NewBet = () => {
               setIsConfirmationOpen(false);
               clearFields();
             }}
-            className="bg-red-600 hover:bg-red-700 transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+            className="bg-primary text-white transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
           >
             Close
           </Button>

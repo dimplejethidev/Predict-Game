@@ -167,7 +167,7 @@ function CardBets() {
   return (
     <div className="flex flex-wrap relative w-[90%] h-full m-auto">
       {error && (
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg z-50 flex flex-col items-center gap-2">
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-2 rounded-lg z-50 flex flex-col items-center gap-2">
           <div className="flex items-center gap-2">
             <p>{error}</p>
             <button 
@@ -179,7 +179,7 @@ function CardBets() {
           </div>
           {error === "Insufficient platform balance" && (
             <Balance 
-              className="bg-white text-red-600 hover:bg-gray-100 text-sm py-1"
+              className="bg-white text-primary hover:bg-gray-100 text-sm py-1"
               onSuccess={() => {
                 setError(null);
                 setShowDepositDialog(false);
