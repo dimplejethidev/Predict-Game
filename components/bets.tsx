@@ -54,12 +54,10 @@ function CardBets() {
       return;
     }
 
-    const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_ADMIN_PK}` as `0x${string}`);
     const hash = await writeContractAsync({
       abi: PREDICTION_MARKET_ABI,
       functionName: "placeBet",
       args: [market.id, side, parseEther(betAmount.toString()), address],
-      account: adminAccount.address,
       address: PREDICTION_MARKET_ADDRESS,
     });
   };

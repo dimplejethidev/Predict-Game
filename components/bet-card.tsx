@@ -55,20 +55,20 @@ const BetCard: React.FC<BetCardProps> = ({
             <div className="flex items-center">
               <TrendingDown className="text-red-500 mr-2" size={20} />
               <p className="text-red-500 text-center font-semibold">
-                {losePercentage}%
+                {losePercentage.toFixed(2)}%
               </p>
             </div>
-            <span className="text-red-500">{noTotalAmount.toFixed(4)} ETH</span>
+            <span className="text-red-500">{noTotalAmount.toFixed(2)} ETH</span>
           </div>
           <div className="flex flex-col justify-center items-center">
             <div className="flex items-center">
               <TrendingUp className="text-green-500 mr-2" size={20} />
               <p className="text-green-500 text-center font-semibold">
-                {winPercentage}%
+                {winPercentage.toFixed(2)}%
               </p>
             </div>
             <span className="text-green-500 text-center">
-              {yesTotalAmount.toFixed(4)} ETH
+              {yesTotalAmount.toFixed(2)} ETH
             </span>
           </div>
         </div>
@@ -80,7 +80,7 @@ const BetCard: React.FC<BetCardProps> = ({
             <Minus size={20} color="white" />
           </button>
           <div className="flex flex-row gap-0 bg-gray-800 rounded-lg overflow-hidden">
-            <span className="text-white">Ξ</span>
+            {/* <span className="text-white">Ξ</span> */}
             <input
               type="number"
               value={betAmountInput}

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
   useAccount,
   useWriteContract,
@@ -59,28 +59,72 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
       abi: PREDICTION_MARKET_ABI,
       functionName: "getBalance",
       account: address,
-      enabled: !!address,
+      query: {
+        enabled: !!address
+      }
     });
 
   const {data: nativeBalance} = useBalance({
     address,
-    enabled: !!address,
+    query: {
+      enabled: !!address
+    }
   });
 
+  const {writeContract: withdraw} = useWriteContract();
+
+  const {data: withdrawReceipt} = useWaitForTransactionReceipt({
+    query: {
+      enabled: !!withdraw,
+    }
+  });
+
+  useEffect(() => {
+    if (withdrawReceipt?.status === 'success') {
+      setOpen(false);
+      refetchContractBalance();
+      setTxStatus({
+        isError: false,
+        isSuccess: true,
+        message: "Withdrawal successful!"
+      });
+    }
+  }, [withdrawReceipt?.status]);
+
   const formattedContractBalance = contractBalance ? Number(formatEther(contractBalance as bigint)).toFixed(4) : '0';
+
+  const handleWithdraw = async () => {
+    if (!amount || !contractBalance) return;
+    
+    try {
+      const withdrawAmount = parseEther(amount);
+      await withdraw({
+        address: PREDICTION_MARKET_ADDRESS,
+        abi: PREDICTION_MARKET_ABI,
+        functionName: "withdraw",
+        args: [withdrawAmount],
+      });
+    } catch (e: any) {
+      setTxStatus({
+        isError: true,
+        isSuccess: false,
+        message: e.message || "Withdrawal failed"
+      });
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className={`bg-red-600 hover:bg-red-700 ${className}`}>
-          Deposit ETH
+          Manage Balance
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-black border-2 border-red-600 text-white max-w-md">
         <DialogHeader>
-          <DialogTitle>Deposit ETH</DialogTitle>
+          <DialogTitle>Deposit/Withdraw ETH</DialogTitle>
           <DialogDescription className="text-gray-400">
-            Deposit ETH to participate in prediction markets
+            Manage your ETH balance for prediction markets
           </DialogDescription>
         </DialogHeader>
 
@@ -91,7 +135,7 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
             </p>
           )}
           <p className="text-sm text-gray-400">
-            Contract Balance: {formattedContractBalance} ETH
+            Platform Balance: {formattedContractBalance} ETH
           </p>
           <div className="flex gap-2">
             {PRESET_AMOUNTS.map((presetAmount) => (
@@ -144,26 +188,35 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
             </Alert>
           )}
 
-          <DepositButton
-            amount={amount}
-            onError={(e) => {
-              console.log(e);
-              setTxStatus({
-                isError: true,
-                isSuccess: false,
-                message: e.message || "Transaction failed"
-              });
-            }}
-            onSuccess={(e) => {
-              setOpen(false);
-              refetchContractBalance();
-              setTxStatus({
-                isError: false,
-                isSuccess: true,
-                message: "Deposit successful!"
-              });
-            }}
-          />
+          <div className="flex gap-2">
+            <DepositButton
+              amount={amount}
+              onError={(e) => {
+                console.log(e);
+                setTxStatus({
+                  isError: true,
+                  isSuccess: false,
+                  message: e.message || "Transaction failed"
+                });
+              }}
+              onSuccess={(e) => {
+                setOpen(false);
+                refetchContractBalance();
+                setTxStatus({
+                  isError: false,
+                  isSuccess: true,
+                  message: "Deposit successful!"
+                });
+              }}
+            />
+            <Button 
+              onClick={handleWithdraw}
+              className="flex-1 bg-red-600 hover:bg-red-700"
+              disabled={!amount || Number(amount) > Number(formattedContractBalance)}
+            >
+              Withdraw
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

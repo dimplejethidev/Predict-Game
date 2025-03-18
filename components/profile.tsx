@@ -74,8 +74,8 @@ const Profile = () => {
                 Wallet: {displayAddress}
               </p>
               <p className="text-lg font-bold mb-4 text-white flex justify-between items-center">
-                Contract Balance:{" "}
-                {userBalance && `${Number(formatEther(userBalance)).toFixed(4)} ETH`}
+                Platform Balance:{" "}
+                {userBalance && `${Number(formatEther(userBalance)).toFixed(2)} ETH`}
                 <Balance />
               </p>
             </CardContent>

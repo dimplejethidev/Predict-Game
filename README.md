@@ -2,7 +2,7 @@
   <img src="./public//logo.png" alt="Prediction Marketplace Logo" width="200">
 </div>
 
-A seamless, Tinder-like prediction marketplace built on the Aurora blockchain. Predict Game enables a clean tinder-like swipe experience to remove the web3 friction whatsover and make it more gaamified for a social betting marketplace.
+A seamless, Tinder-like prediction marketplace built on the Aurora blockchain. Swipe-Bet enables a clean tinder-like swipe experience to remove the web3 friction whatsover and make it more gaamified for a social betting marketplace.
 
 ## 🌟 Key Features
 
