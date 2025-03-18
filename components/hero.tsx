@@ -15,7 +15,7 @@ const Hero = () => {
     >
       <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
-          className="w-44 h-44 bg-red-300 rounded-full opacity-20 filter blur-3xl"
+          className="w-44 h-44 bg-purple-300-300 rounded-full opacity-20 filter blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 360],

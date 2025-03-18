@@ -107,7 +107,7 @@ const NewBet = () => {
          placeholder="Describe your prediction"
          value={formData.question}
          onChange={handleChange}
-         className="w-full h-24 resize-none bg-gray-100 border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+         className="w-full h-24 resize-none bg-gray-100 border  rounded-lg p-3 text-gray-900 focus:outline-none "
        />
        
         )}
@@ -122,7 +122,7 @@ const NewBet = () => {
                 onChange={handleChange}
                 min="1"
                 max="2160"
-                className="bg-gray-900  border-red-500 focus:border-red-600"
+                className="bg-gray-100 border  rounded-lg p-3 text-gray-900 "
               />
             </div>
             <div className="space-y-2">
@@ -132,7 +132,7 @@ const NewBet = () => {
                 type="number"
                 value={formData.resolutionDuration}
                 onChange={handleChange}
-                className="bg-gray-900  border-red-500 focus:border-red-600"
+                className="bg-gray-100 border  rounded-lg p-3 text-gray-900"
               />
             </div>
           </>
@@ -147,7 +147,7 @@ const NewBet = () => {
                 placeholder="Enter image URL (http://, https://, or ipfs://)"
                 value={formData.imageUri}
                 onChange={handleChange}
-                className="bg-gray-900  border-red-500 focus:border-red-600"
+                className="bg-gray-100 border  rounded-lg p-3 text-gray-900 "
               />
             </div>
 
@@ -161,14 +161,14 @@ const NewBet = () => {
     <>
       <Sheet>
         <SheetTrigger>
-          <Button className="bg-transparent border text-black h-10 w-10">
+          <Button className="bg-transparent border text-gray-900 h-10 w-10">
             <span className="text-2xl">+</span>
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-full bg-black  p-0">
+        <SheetContent className="w-full bg-gray-100 text-gray-900 p-0">
           <div className="flex flex-col h-full p-6">
             <SheetHeader>
-              <SheetTitle className="text-3xl font-bold text-center text-transparent bg-clip-text bg-white">
+              <SheetTitle className="text-3xl font-bold text-center  bg-clip-text bg-white">
                 Create Your Prediction
               </SheetTitle>
             </SheetHeader>
@@ -198,7 +198,7 @@ const NewBet = () => {
                   <Button
                     onClick={handlePrevStep}
                     disabled={step === 0}
-                    className="bg-red-600 hover:bg-red-700 disabled:bg-gray-800 disabled:hover:bg-gray-800 transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:shadow-none"
+                    className="bg-red-600  hover:bg-red-700 disabled:bg-red-600  transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:shadow-none"
                   >
                     ◀ Back
                   </Button>

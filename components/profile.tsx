@@ -62,19 +62,19 @@ const Profile = () => {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full h-full sm:max-w-md p-0 bg-black"
+        className="w-full h-full sm:max-w-md p-0 bg-gray-100 text-gray-800"
       >
         <SheetHeader className="text-white p-4">
           <SheetTitle className="text-xl font-bold">Betting Profile</SheetTitle>
         </SheetHeader>
         <div className="p-4 overflow-y-auto max-h-[calc(100vh-60px)]">
-          <Card className="mb-6 bg-black border-2 border-red-600">
+          <Card className="mb-6 bg-gray-100 text-gray-800 border-2 border-input">
             <CardHeader></CardHeader>
             <CardContent>
-              <p className="text-sm mb-2 text-white">
+              <p className="text-sm mb-2 ">
                 Wallet: {displayAddress}
               </p>
-              <p className="text-lg font-bold mb-4 text-white flex justify-between items-center">
+              <p className="text-lg font-bold mb-4 flex justify-between items-center">
                 USDC Balance:{" "}
                 {userBalance && `${Number(userBalance) / 1e6} USDC`}
                 <Balance />
@@ -87,16 +87,16 @@ const Profile = () => {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-2 bg-black mb-4">
+            <TabsList className="grid w-full grid-cols-2 bg-red-600/30 mb-4">
               <TabsTrigger
                 value="placed"
-                className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white"
+                className="text-black data-[state=active]:bg-red-600 data-[state=active]:text-black"
               >
                 Bets Placed
               </TabsTrigger>
               <TabsTrigger
                 value="created"
-                className="text-white data-[state=active]:bg-red-600 data-[state=active]:text-white"
+                className="text-black data-[state=active]:bg-red-600 data-[state=active]:text-black"
               >
                 Bets Created
               </TabsTrigger>
