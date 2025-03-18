@@ -111,7 +111,7 @@ const Profile = () => {
             </TabsContent>
             <TabsContent
               value="created"
-              className="h-auto max-h-[calc(100vh-450px)] overflow-y-auto pr-2"
+              className="h-auto max-h-[calc(100vh-350px)] overflow-y-auto pr-2"
             >
               <CreatedBets />
             </TabsContent>

@@ -123,36 +123,36 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={`bg-primary hover:bg-primary/60 ${className}`}>
+        <Button className={`bg-primary text-white hover:bg-primary/60 ${className}`}>
           Manage Balance
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-black border-2 border-red-600 text-white max-w-md">
+      <DialogContent className=" text-primary max-w-md">
         <DialogHeader>
           <DialogTitle>Deposit/Withdraw ETH</DialogTitle>
-          <DialogDescription className="text-gray-400">
+          <DialogDescription className="text-black">
             Manage your ETH balance for prediction markets
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {nativeBalance && (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-black">
               Wallet Balance: {Number(nativeBalance.formatted).toFixed(4)} ETH
             </p>
           )}
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-black">
             Platform Balance: {formattedContractBalance} ETH
           </p>
           <div className="flex gap-2">
             {PRESET_AMOUNTS.map((presetAmount) => (
               <Button
                 key={presetAmount}
-                variant="outline"
+                // variant="outline"
                 className={`flex-1 ${
                   selectedPreset === presetAmount
-                    ? "bg-red-600 text-white"
-                    : "text-white"
+                    ? "bg-primary text-white"
+                    : "bg-light text-primary border border-primary"
                 }`}
                 onClick={() => {
                   setAmount(presetAmount.toString());
@@ -172,7 +172,7 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
                 setAmount(e.target.value);
                 setSelectedPreset(null);
               }}
-              className="pl-3 bg-transparent text-white"
+              className="pl-3 bg-transparent text-black"
               placeholder="Enter ETH amount"
               step="0.1"
               min="0.1"
@@ -195,7 +195,7 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
             </Alert>
           )}
 
-          <div className="flex gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <DepositButton
               amount={amount}
               onError={(e) => {
@@ -218,7 +218,7 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
             />
             <Button 
               onClick={handleWithdraw}
-              className="flex-1 bg-red-600 hover:bg-red-700"
+              className="flex-1 bg-primary hover:bg-primary"
               disabled={!amount || Number(amount) > Number(formattedContractBalance)}
             >
               Withdraw

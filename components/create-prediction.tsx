@@ -87,7 +87,7 @@ export function CreatePrediction() {
       <div>
         <label
           htmlFor="bettingDuration"
-          className="block text-sm text-white font-medium"
+          className="block text-sm text-primary font-medium"
         >
           Betting Duration (hours)
         </label>
@@ -97,7 +97,7 @@ export function CreatePrediction() {
           name="bettingDuration"
           value={formData.bettingDuration}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border p-2"
+          className="mt-1 block w-full bg-light rounded-md border border-primary p-2"
           required
         />
       </div>
@@ -105,7 +105,7 @@ export function CreatePrediction() {
       <div>
         <label
           htmlFor="resolutionDuration"
-          className="block text-sm text-white font-medium"
+          className="block text-sm text-primary font-medium"
         >
           Resolution Duration (hours)
         </label>

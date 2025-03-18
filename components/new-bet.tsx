@@ -103,12 +103,12 @@ const NewBet = () => {
         </h3>
         {step === 0 && (
           <Textarea
-            name="question"
-            placeholder="Describe your prediction"
-            value={formData.question}
-            onChange={handleChange}
-            className="w-full h-24 bg-gray-900 text-white border-red-500 focus:border-red-600 resize-none"
-          />
+          name="question"
+          placeholder="Describe your prediction"
+          value={formData.question}
+          onChange={handleChange}
+          className="w-full h-24 bg-white text-black border border-primary outline-primary placeholder-gray-500 rounded-lg px-3 py-2 resize-none shadow-sm"
+        />
         )}
         {step === 1 && (
           <>
@@ -121,7 +121,7 @@ const NewBet = () => {
                 onChange={handleChange}
                 min="1"
                 max="2160"
-                className="bg-gray-900 text-white border-red-500 focus:border-red-600"
+                className="bg-light border-primary text-black focus:outline-primary"
               />
             </div>
             <div className="space-y-2">
@@ -131,7 +131,7 @@ const NewBet = () => {
                 type="number"
                 value={formData.resolutionDuration}
                 onChange={handleChange}
-                className="bg-gray-900 text-white border-red-500 focus:border-red-600"
+                className="bg-light border-primary text-black focus:outline-primary"
               />
             </div>
           </>
@@ -146,7 +146,7 @@ const NewBet = () => {
                 placeholder="Enter image URL (http://, https://, or ipfs://)"
                 value={formData.imageUri}
                 onChange={handleChange}
-                className="bg-gray-900 text-white border-red-500 focus:border-red-600"
+                className="bg-light border-primary text-black focus:outline-primary"
               />
             </div>
 
@@ -161,7 +161,7 @@ const NewBet = () => {
       <Sheet>
         <SheetTrigger>
           <Button className="bg-primary text-primary h-10 w-10">
-            <span className="text-2xl">+</span>
+            <span className="text-2xl text-white">+</span>
           </Button>
         </SheetTrigger>
         <SheetContent className="w-full bg-light text-primary p-0">
@@ -177,12 +177,12 @@ const NewBet = () => {
                   <div
                     key={index}
                     className={`flex flex-col items-center ${
-                      index === step ? "text-red-500" : "text-gray-500"
+                      index === step ? "text-primary" : "text-primary"
                     }`}
                   >
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        index === step ? "bg-red-500 text-black" : "bg-gray-800"
+                        index === step ? "bg-primary text-black" : "bg-primary text-white border-primary border-2"
                       }`}
                     >
                       {index < step ? "✓" : s.icon}
@@ -197,14 +197,14 @@ const NewBet = () => {
                   <Button
                     onClick={handlePrevStep}
                     disabled={step === 0}
-                    className="bg-red-600  hover:bg-red-700 disabled:bg-red-600  transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:shadow-none"
+                    className="bg-primary  hover:bg-primary/60 disabled:bg-primary  transition-all duration-300 shadow-[0_0_15px_rgba(46,111,64,0.5)] disabled:shadow-none"
                   >
                     ◀ Back
                   </Button>
                   {step < steps.length - 1 ? (
                     <Button
                       onClick={handleNextStep}
-                      className="bg-red-600 hover:bg-red-700 transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+                      className="bg-primary hover:bg-primary/60 transition-all duration-300 shadow-[0_0_15px_rgba(46,111,64,0.5)]"
                     >
                       Next ▶
                     </Button>
