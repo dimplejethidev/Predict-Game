@@ -14,7 +14,7 @@ const Header = () => {
    const {user,logout , authenticated} = usePrivy();
   return (
     <div className="flex flex-row justify-between w-full p-4 border-b border-primary">
-      <h2 className={`text-primary text-2xl ${sixtyfour.className}`}>SwipeX</h2>
+      <h2 className={`text-primary text-2xl ${sixtyfour.className}`}>Predict Game</h2>
 
       {authenticated && (
             <button className="bg-primary text-light px-2 rounded-lg" onClick={logout}>Logout</button>

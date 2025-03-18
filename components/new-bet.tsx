@@ -167,7 +167,7 @@ const NewBet = () => {
         <SheetContent className="w-full bg-black text-white p-0">
           <div className="flex flex-col h-full p-6">
             <SheetHeader>
-              <SheetTitle className="text-3xl font-bold text-center text-transparent bg-clip-text bg-white">
+              <SheetTitle className="text-3xl font-bold text-center  bg-clip-text bg-white">
                 Create Your Prediction
               </SheetTitle>
             </SheetHeader>
@@ -197,7 +197,7 @@ const NewBet = () => {
                   <Button
                     onClick={handlePrevStep}
                     disabled={step === 0}
-                    className="bg-red-600 hover:bg-red-700 disabled:bg-gray-800 disabled:hover:bg-gray-800 transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:shadow-none"
+                    className="bg-red-600  hover:bg-red-700 disabled:bg-red-600  transition-all duration-300 shadow-[0_0_15px_rgba(220,38,38,0.5)] disabled:shadow-none"
                   >
                     ◀ Back
                   </Button>

@@ -33,18 +33,16 @@ const BetCard: React.FC<BetCardProps> = ({
   betAmountInput,
   setBetAmountInput,
 }) => {
-  const handleIncreaseBet = () =>
-    setBetAmountInput(Number((betAmountInput + 0.1).toFixed(2)));
-  const handleDecreaseBet = () =>
-    setBetAmountInput(Number((Math.max(0.1, betAmountInput - 0.1)).toFixed(2)));
+  const handleIncreaseBet = () => setBetAmountInput(Number((betAmountInput + 0.1).toFixed(2)));
+  const handleDecreaseBet = () => setBetAmountInput(Number((Math.max(0.1, betAmountInput - 0.1)).toFixed(2)));
 
   return (
-    <div className="w-full max-w-sm mx-auto h-[calc(100vh-8rem)] bg-white text-gray-900 rounded-xl shadow-md border border-gray-200 overflow-hidden">
-      <div className="relative h-1/2 w-full">
+    <div className="w-full max-w-sm mx-auto h-[calc(100vh-4rem)] bg-black text-white rounded-xl shadow-lg overflow-hidden">
+      <div className="relative h-1/3 w-full">
         <img src={imageUrl} className="w-full h-full object-cover" />
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-white to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black to-transparent" />
         <div className="absolute bottom-4 left-4 flex items-center">
-          <span className="bg-primary text-white text-xs px-2 py-1 rounded-full">
+          <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
             <TimestampDisplay timestamp={betTime.toString()} />
           </span>
         </div>
@@ -104,8 +102,6 @@ const BetCard: React.FC<BetCardProps> = ({
             <Plus size={20} color="white" />
           </button>
         </div>
-
-        {/* Action Buttons */}
         {/* <div className="flex justify-around mt-4">
           <Button
             variant={"outline"}
@@ -117,14 +113,14 @@ const BetCard: React.FC<BetCardProps> = ({
           <Button
             variant={"outline"}
             onClick={onPassClick}
-            className="rounded-full bg-yellow-300 text-yellow-700 hover:bg-yellow-400"
+            className="rounded-full bg-yellow-300  text-yellow-600 hover:bg-yellow-400 "
           >
             Pass
           </Button>
           <Button
             variant={"outline"}
             onClick={onYesClick}
-            className="rounded-full bg-green-700 text-white flex flex-row gap-1 hover:bg-green-600"
+            className="rounded-full bg-green-500 text-white flex flex-row gap-1 hover:bg-green-400"
           >
             <Check size={24} />
           </Button>

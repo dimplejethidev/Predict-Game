@@ -88,8 +88,11 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
         isSuccess: true,
         message: "Withdrawal successful!"
       });
+      if (onSuccess) {
+        onSuccess();
+      }
     }
-  }, [withdrawReceipt?.status]);
+  }, [withdrawReceipt?.status, onSuccess]);
 
   const formattedContractBalance = contractBalance ? Number(formatEther(contractBalance as bigint)).toFixed(4) : '0';
 
@@ -98,6 +101,10 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
     
     try {
       const withdrawAmount = parseEther(amount);
+      setTxStatus({
+        isError: false,
+        isSuccess: false,
+      });
       await withdraw({
         address: PREDICTION_MARKET_ADDRESS,
         abi: PREDICTION_MARKET_ABI,
