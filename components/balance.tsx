@@ -123,7 +123,7 @@ export const Balance: React.FC<DepositProps> = ({className, onSuccess}) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={`bg-primary active:border-primary boreder-primary text-white hover:bg-primary/60 ${className}`}>
+        <Button className={`bg-primary active:border-primary boreder-primary text-white hover:bg-primary/80 ${className}`}>
           Manage Balance
         </Button>
       </DialogTrigger>
