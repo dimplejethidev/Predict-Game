@@ -14,7 +14,7 @@ const MainApp = () => {
         <Bets />
       </div>
       <div className="container mx-auto">
-        <h1 className="text-2xl font-bold mb-6 text-white w-[90%] m-auto">
+        <h1 className="text-2xl font-bold my-6 text-primary w-[90%] m-auto">
           Markets
         </h1>
         {/* <button onClick={logout}>Logout</button> */}

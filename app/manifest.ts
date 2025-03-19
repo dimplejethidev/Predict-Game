@@ -1,4 +1,5 @@
 import type {MetadataRoute} from "next";
+import logo from './logo.png'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -9,13 +10,13 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     background_color: "#000000",
     theme_color: "#000000",
-    icons: [
-      {
-        src: "",
-        sizes: "192x192",
-        type: "image/png",
-        purpose: "maskable",
-      },
-    ],
+    // icons: [
+    //   {
+    //     src: '/prediction-logo.png',
+    //     sizes: "192x192",
+    //     type: "image/png",
+    //     purpose: "maskable",
+    //   },
+    // ],
   };
 }

@@ -24,6 +24,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Predict Game",
   description: "Predict Game",
+  icons: {
+    icon: "/prediction-logo.png",
+  },
 };
 
 export default function RootLayout({
